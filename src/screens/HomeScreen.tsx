@@ -1,33 +1,38 @@
-import * as React from 'react';
-import {
-  Card,
-  Title,
-  Paragraph, FAB,
-} from 'react-native-paper';
-import { StyleSheet, View } from 'react-native';
+import * as React from "react";
+import { FAB } from "react-native-paper";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { RootStackScreenProps } from "../types";
-import { HOME } from '../navigation/routes';
+import * as routes from "../navigation/routes";
+import { ClassItem } from "../components/ClassItem";
+import { observer } from "mobx-react-lite";
+import { useStore } from "../store/store";
 
+type Props = {} & RootStackScreenProps<typeof routes.HOME>;
 
-type Props = {} & RootStackScreenProps<typeof HOME>;
+export const HomeScreen = observer(({ navigation }: Props) => {
+  const { classes } = useStore();
 
-export default function HomeScreen({navigation}: Props) {
   return (
     <View style={styles.container}>
-      <Card onPress={() => {}}>
-        <Card.Content>
-          <Title>{'title'}</Title>
-          <Paragraph>{'content'}</Paragraph>
-        </Card.Content>
-      </Card>
+      <ScrollView>
+        {classes.items.map((item) => {
+          return (
+            <View key={`${item.id}`} style={{ marginBottom: 15 }}>
+              <ClassItem title={item.title} onPress={() => {}} />
+            </View>
+          );
+        })}
+      </ScrollView>
       <FAB
         style={styles.fab}
         icon="plus"
-        onPress={() => console.log('Pressed')}
+        onPress={() => {
+          navigation.navigate(routes.EDIT_CLASS);
+        }}
       />
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -36,10 +41,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   fab: {
-    position: 'absolute',
+    position: "absolute",
     margin: 32,
     right: 0,
     bottom: 0,

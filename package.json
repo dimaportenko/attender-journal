@@ -27,6 +27,8 @@
     "expo-splash-screen": "~0.13.5",
     "expo-status-bar": "~1.1.0",
     "expo-web-browser": "~10.0.3",
+    "mobx": "^6.3.7",
+    "mobx-react-lite": "^3.2.2",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
@@ -40,6 +42,7 @@
     "@types/react": "~17.0.21",
     "@types/react-native": "~0.64.12",
     "jest-expo": "~43.0.0",
+    "prettier": "^2.4.1",
     "typescript": "~4.3.5"
   },
   "private": true
