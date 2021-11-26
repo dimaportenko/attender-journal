@@ -14,20 +14,30 @@ type EditClassScreenProps = RootStackScreenProps<typeof routes.EDIT_CLASS> & {};
 export const EditClassScreen = observer(
   ({ navigation, route }: EditClassScreenProps) => {
     const { classes } = useStore();
+    const item = route.params?.classItem ?? {
+      id: new Date().getTime(),
+      title: '',
+    };
 
     const theme = useTheme();
     const {
       colors: { background },
     } = theme;
-    const [title, setTitle] = React.useState("");
+
+    const [title, setTitle] = React.useState(item.title);
     const [error, setError] = React.useState(false);
+
+    const onDelete = () => {
+      classes.deleteClassItem(item);
+      navigation.goBack();
+    }
 
     const onSave = () => {
       if (!title) {
         setError(true);
       } else {
-        classes.addClassItem({
-          id: new Date().getTime(),
+        classes.updateClassItem({
+          id: item.id,
           title,
         });
         navigation.goBack();
@@ -39,6 +49,7 @@ export const EditClassScreen = observer(
         <Appbar.Header theme={theme}>
           <Appbar.BackAction onPress={navigation.goBack} />
           <Appbar.Content title="New Class" />
+          <Appbar.Action icon="delete" onPress={onDelete} />
           <Appbar.Action icon="content-save" onPress={onSave} />
         </Appbar.Header>
         <View style={{ flex: 1, backgroundColor: background, padding: 15 }}>

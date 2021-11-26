@@ -18,7 +18,11 @@ export const HomeScreen = observer(({ navigation }: Props) => {
         {classes.items.map((item) => {
           return (
             <View key={`${item.id}`} style={{ marginBottom: 15 }}>
-              <ClassItem title={item.title} onPress={() => {}} />
+              <ClassItem title={item.title} onPress={() => {
+                navigation.navigate(routes.EDIT_CLASS, {
+                  classItem: item
+                })
+              }} />
             </View>
           );
         })}

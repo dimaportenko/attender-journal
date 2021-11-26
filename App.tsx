@@ -20,13 +20,18 @@ const CombinedDarkTheme = merge(NavigationDarkTheme, PaperDarkTheme);
 import useCachedResources from "./src/hooks/useCachedResources";
 import useColorScheme from "./src/hooks/useColorScheme";
 import Navigation from "./src/navigation";
-import { RootStore, StoreProvider } from "./src/store/store";
+import { store, StoreProvider, trunk } from "./src/store/store";
 import { View } from "react-native";
 
 export default function App() {
-  let [rootStore, setRootStore] = useState<RootStore | null>(null);
+  const [isStoreLoaded, setIsStoreLoaded] = useState(false);
+  const storeRehydrate = async () => {
+    await trunk.init();
+    setIsStoreLoaded(true)
+  }
+
   useEffect(() => {
-    setRootStore(new RootStore());
+    storeRehydrate()
   }, []);
 
   const isLoadingComplete = useCachedResources();
@@ -35,7 +40,7 @@ export default function App() {
   const theme = isDark ? CombinedDarkTheme : CombinedDefaultTheme;
 
 
-  if (!isLoadingComplete || !rootStore) {
+  if (!isLoadingComplete || !isStoreLoaded) {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         <ActivityIndicator size="large" />
@@ -43,7 +48,7 @@ export default function App() {
     );
   } else {
     return (
-      <StoreProvider value={rootStore}>
+      <StoreProvider value={store}>
         <PaperProvider theme={theme}>
           <SafeAreaProvider>
             <Navigation theme={theme} />
